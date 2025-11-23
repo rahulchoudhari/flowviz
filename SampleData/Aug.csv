@@ -1,0 +1,11 @@
+Transaction_ID,Date,Region,Store_Type,Product_Category,Product_Name,Unit_Price,Quantity_Sold,Sales_Amount,Promotion_Flag,Inventory_Units,Shift,Manpower_Hours,kWh_Used,Water_Used_Liters
+A0801,2025-08-01,East,Hypermarket,Beverages,Iced Coffee 500ml,3.50,150,525.00,No,2500,Day,10.0,30.0,400.0
+A0802,2025-08-03,West,Convenience,Snacks,Trail Mix Pouch,2.99,120,358.80,Yes,800,Night,14.5,22.0,5.0
+A0803,2025-08-05,North,Supermarket,Personal Care,Sunscreen Lotion,12.50,80,1000.00,No,1500,Day,12.0,18.0,15.0
+A0804,2025-08-08,South,Hypermarket,Food,Grill Sauces Variety,4.99,95,474.05,No,1100,Day,8.0,15.0,12.0
+A0805,2025-08-10,East,Supermarket,Beverages,Juice Concentrate,6.75,60,405.00,Yes,950,Night,16.0,35.0,550.0
+A0806,2025-08-12,West,Hypermarket,Personal Care,Deodorant Stick,4.25,110,467.50,No,2200,Day,9.5,14.5,8.0
+A0807,2025-08-15,North,Convenience,Snacks,Salty Pretzels Bag,1.50,250,375.00,No,700,Day,11.0,18.0,4.0
+A0808,2025-08-18,South,Supermarket,Food,Ice Cream Tub,6.00,75,450.00,Yes,1300,Night,13.0,28.0,10.0
+A0809,2025-08-20,East,Convenience,Beverages,Bottled Water 1L,1.00,300,300.00,No,600,Day,17.0,40.0,750.0
+A0810,2025-08-22,West,Supermarket,Personal Care,Face Wash 200ml,7.50,50,375.00,No,1050,Night,9.0,16.5,9.0

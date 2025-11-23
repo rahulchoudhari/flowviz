@@ -1,0 +1,11 @@
+Transaction_ID,Date,Region,Store_Type,Product_Category,Product_Name,Unit_Price,Quantity_Sold,Sales_Amount,Promotion_Flag,Inventory_Units,Shift,Manpower_Hours,kWh_Used,Water_Used_Liters
+O1001,2025-10-01,East,Hypermarket,Snacks,Large Candy Bag,8.99,180,1618.20,No,3000,Day,15.0,35.0,7.0
+O1002,2025-10-03,West,Convenience,Beverages,Hot Chocolate Mix,5.25,90,472.50,Yes,700,Night,12.5,20.0,250.0
+O1003,2025-10-05,North,Supermarket,Food,Baking Flour 5kg,5.99,120,718.80,No,2000,Day,14.0,21.0,10.0
+O1004,2025-10-08,South,Hypermarket,Personal Care,Moisturizing Cream,15.00,70,1050.00,No,1300,Day,10.0,17.0,14.0
+O1005,2025-10-10,East,Supermarket,Snacks,Seasonal Popcorn Tins,10.50,50,525.00,Yes,800,Night,18.0,30.0,5.5
+O1006,2025-10-12,West,Hypermarket,Food,Frozen Pie,7.50,45,337.50,No,1900,Day,7.0,12.0,8.5
+O1007,2025-10-15,North,Convenience,Beverages,Herbal Tea Selection,4.99,100,499.00,No,650,Day,13.5,21.5,180.0
+O1008,2025-10-18,South,Supermarket,Personal Care,Lip Balm 3-Pack,4.50,130,585.00,Yes,1200,Night,15.5,28.0,9.0
+O1009,2025-10-20,East,Convenience,Snacks,Mini Chocolate Bars,3.00,220,660.00,No,400,Day,19.0,35.0,4.0
+O1010,2025-10-22,West,Supermarket,Food,Pumpkin Puree Can,1.99,95,189.05,No,1000,Night,11.0,16.5,10.5

@@ -1,6 +1,6 @@
-# FlowViz - FMGC Data Analytics Platform
+# FlowViz - Industry Data Analytics Platform
 
-A professional-grade Streamlit application for visualizing and analyzing FMGC (Fast-Moving Consumer Goods) industry data with machine learning-powered insights.
+A professional-grade Streamlit application for visualizing and analyzing Industry  data with machine learning-powered insights.
 
 ## 🌟 Features
 

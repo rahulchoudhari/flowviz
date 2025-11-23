@@ -1,0 +1,11 @@
+Transaction_ID,Date,Region,Store_Type,Product_Category,Product_Name,Unit_Price,Quantity_Sold,Sales_Amount,Promotion_Flag,Inventory_Units,Shift,Manpower_Hours,kWh_Used,Water_Used_Liters
+S0901,2025-09-01,East,Hypermarket,Beverages,Iced Coffee 500ml,3.50,100,350.00,No,2300,Day,8.0,25.0,300.0
+S0902,2025-09-03,West,Convenience,Food,Canned Soup,1.99,80,159.20,Yes,900,Night,15.0,23.5,6.0
+S0903,2025-09-05,North,Supermarket,Personal Care,Hand Soap Refill,5.50,110,605.00,No,1600,Day,13.0,19.0,18.0
+S0904,2025-09-08,South,Hypermarket,Food,Pasta Sauce Jars,3.25,150,487.50,No,1400,Day,9.0,16.0,10.0
+S0905,2025-09-10,East,Supermarket,Snacks,Family Size Cookies,3.99,70,279.30,Yes,1000,Night,17.0,28.0,4.5
+S0906,2025-09-12,West,Hypermarket,Beverages,Tea Bags (Black),4.50,85,382.50,No,2100,Day,10.5,22.0,150.0
+S0907,2025-09-15,North,Convenience,Personal Care,Small Hand Lotion,3.00,90,270.00,No,750,Day,12.0,17.0,5.5
+S0908,2025-09-18,South,Supermarket,Food,Frozen Vegetables Bag,4.00,65,260.00,Yes,1500,Night,14.0,25.0,9.5
+S0909,2025-09-20,East,Convenience,Snacks,Granola Bars,2.25,180,405.00,No,550,Day,18.0,32.0,3.0
+S0910,2025-09-22,West,Supermarket,Personal Care,Hair Spray,5.99,40,239.60,No,1150,Night,10.0,15.0,7.0

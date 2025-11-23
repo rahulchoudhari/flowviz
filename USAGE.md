@@ -1,6 +1,6 @@
 # FlowViz Usage Guide
 
-This guide will help you get started with FlowViz for FMGC data analysis.
+This guide will help you get started with FlowViz for Industry Data analysis.
 
 ## Quick Start
 
@@ -44,7 +44,7 @@ After logging in, you'll see the home page with:
 #### Sample Data
 
 Two sample files are included:
-- `sample_data.csv` - Current month FMGC data
+- `sample_data.csv` - Current month Industry Data
 - `sample_data_previous.csv` - Previous month data for comparison
 
 #### What You'll See
@@ -262,8 +262,8 @@ For professional reports:
 
 ## FAQ
 
-**Q: Can I use this with non-FMGC data?**
-A: Yes! While designed for FMGC, it works with any tabular data.
+**Q: Can I use this with non-Industry Data?**
+A: Yes! While designed for Industry, it works with any tabular data.
 
 **Q: How many files can I upload?**
 A: One at a time for visualization, two for comparison.

@@ -6,10 +6,42 @@ import plotly.graph_objects as go
 import io
 import hashlib
 
+# Import modular helpers
+from helpers.datetime_utils import detect_datetime_format
+from helpers.ml_analysis import analyze_data_with_ml, get_data_statistics
+from helpers.visualizations import create_visualization
+from helpers.comparison import (
+    calculate_comparison_summary, 
+    calculate_overall_change,
+    calculate_average_difference,
+    create_comparison_chart,
+    calculate_metric_change
+)
+from helpers.ceo_dashboard import (
+    create_kpi_cards,
+    create_revenue_trend,
+    create_regional_performance,
+    create_product_mix,
+    create_efficiency_metrics,
+    create_promotion_impact,
+    create_top_products
+)
+from helpers.custom_charts import (
+    get_column_types,
+    create_custom_line_chart,
+    create_custom_bar_chart,
+    create_custom_scatter,
+    create_custom_pie_chart,
+    create_custom_box_plot,
+    create_custom_heatmap,
+    create_custom_area_chart,
+    create_custom_histogram
+)
+
 # Page configuration
 st.set_page_config(
-    page_title="FlowViz - FMGC Data Analytics",
-    page_icon="📊",
+    page_title="FlowViz - Industry Data Analytics",
+    page_icon="logo/flowviz_logo.png",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -87,8 +119,13 @@ def login_page():
     col1, col2, col3 = st.columns([1, 2, 1])
     
     with col2:
-        st.markdown("<h1 style='text-align: center;'>📊 FlowViz</h1>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center;'>FMGC Data Analytics Platform</h3>", unsafe_allow_html=True)
+        # Display logo
+        col_logo1, col_logo2, col_logo3 = st.columns([1, 1, 1])
+        with col_logo2:
+            st.image("logo/flowviz_logo.png", width=150)
+        
+        st.markdown("<h1 style='text-align: center;'>FlowViz</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center;'>Industry Data Analytics Platform</h3>", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
         
         with st.container():
@@ -114,258 +151,216 @@ def login_page():
             st.info("📌 Demo credentials: username='demo', password='demo123'")
 
 def home_page():
-    """Display home page with carousel"""
-    st.title("🏠 Welcome to FlowViz Dashboard")
-    st.markdown(f"Hello, **{st.session_state.username}**! 👋")
+    """Display industrial data intelligence home page"""
     
-    # Carousel-like feature showcase
-    st.markdown("---")
-    st.header("✨ What FlowViz Can Do")
+    # Display logo at the top
+    col_logo1, col_logo2, col_logo3 = st.columns([2, 1, 2])
+    with col_logo2:
+        st.image("logo/flowviz_logo.png", width=200)
     
-    # Create carousel items
-    carousel_items = [
-        {
-            "title": "📊 Smart Data Visualization",
-            "description": "Upload your CSV or Excel files and let our ML algorithms automatically identify the best visualizations for your data.",
-            "icon": "📊"
-        },
-        {
-            "title": "📈 Comparative Analysis",
-            "description": "Compare current data with previous month's data to identify trends, patterns, and anomalies.",
-            "icon": "📈"
-        },
-        {
-            "title": "💾 Export & Download",
-            "description": "Download all visualizations and analyzed data in high-quality formats for presentations and reports.",
-            "icon": "💾"
-        },
-        {
-            "title": "🤖 ML-Powered Insights",
-            "description": "Leverage machine learning to discover hidden patterns and get actionable insights from your FMGC data.",
-            "icon": "🤖"
+    # Modern dark-themed CSS with Tailwind-inspired styling
+    st.markdown("""
+    <style>
+        .flow-gradient {
+            background: linear-gradient(90deg, #10b981 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
         }
-    ]
+        .hero-section {
+            background-image: radial-gradient(circle at 50% 10%, rgba(20, 184, 166, 0.15) 0%, rgba(248, 249, 250, 1) 70%);
+            padding: 80px 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .data-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .data-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(6, 182, 212, 0.3);
+            border-color: #06b6d4;
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .use-case-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #6b7280;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-button {
+            background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(6, 182, 212, 0.4);
+        }
+    </style>
+    """, unsafe_allow_html=True)
     
-    # Display carousel items in a grid
-    cols = st.columns(2)
-    for idx, item in enumerate(carousel_items):
-        with cols[idx % 2]:
-            st.markdown(f"""
-                <div class='carousel-item'>
-                    <h2>{item['icon']} {item['title']}</h2>
-                    <p style='font-size: 16px;'>{item['description']}</p>
-                </div>
-            """, unsafe_allow_html=True)
+    # Hero Section
+    st.markdown(f"""
+    <div class="hero-section">
+        <h1 class="hero-title">
+            Turn <span class="flow-gradient">Industrial Data Flow</span><br>
+            into <span style="color: #10b981;">Actionable Intelligence</span>
+        </h1>
+        <p class="hero-subtitle">
+            FlowViz is your central hub for manufacturing, supply chain, and resource utilization analysis—built for real-time operational excellence.
+        </p>
+        <p style="font-size: 1.2rem; color: #374151; margin-top: 20px;">
+            👋 Welcome back, <strong>{st.session_state.username}</strong>!
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    st.markdown("---")
-    
-    # Key Features Section
-    st.header("🎯 Key Features")
+    # Key Analytical Features Section
+    st.markdown("<h2 style='text-align: center; font-size: 2.5rem; margin: 60px 0 40px 0; color: #1f2937;'>⚡ Key Analytical Features</h2>", unsafe_allow_html=True)
     
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         st.markdown("""
-            <div class='feature-card'>
-                <h3 style='text-align: center;'>🔒</h3>
-                <h4 style='text-align: center;'>Secure Login</h4>
-                <p>Protected access to your data</p>
-            </div>
+        <div class="data-card">
+            <span class="feature-icon">📊</span>
+            <h3 style="color: #10b981; margin-bottom: 15px;">Overall Equipment Efficiency (OEE)</h3>
+            <p style="color: #6b7280; font-size: 0.95rem;">
+                Automated calculation of Availability, Performance, and Quality using production logs and shift data.
+            </p>
+        </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
-            <div class='feature-card'>
-                <h3 style='text-align: center;'>📁</h3>
-                <h4 style='text-align: center;'>File Upload</h4>
-                <p>Support for CSV and Excel files</p>
-            </div>
+        <div class="data-card">
+            <span class="feature-icon">⚡</span>
+            <h3 style="color: #06b6d4; margin-bottom: 15px;">Utility & Resource Consumption</h3>
+            <p style="color: #6b7280; font-size: 0.95rem;">
+                Visualize kWh, water, and manpower per unit of output to identify waste and drive sustainability.
+            </p>
+        </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown("""
-            <div class='feature-card'>
-                <h3 style='text-align: center;'>🔍</h3>
-                <h4 style='text-align: center;'>Auto-Analysis</h4>
-                <p>ML-driven data insights</p>
-            </div>
+        <div class="data-card">
+            <span class="feature-icon">⚠️</span>
+            <h3 style="color: #eab308; margin-bottom: 15px;">Real-Time Anomaly Alerts</h3>
+            <p style="color: #6b7280; font-size: 0.95rem;">
+                Receive instant notifications for unexpected deviations in production metrics or utility spikes.
+            </p>
+        </div>
         """, unsafe_allow_html=True)
     
     with col4:
         st.markdown("""
-            <div class='feature-card'>
-                <h3 style='text-align: center;'>📊</h3>
-                <h4 style='text-align: center;'>Pro Visuals</h4>
-                <p>Professional-grade charts</p>
-            </div>
+        <div class="data-card">
+            <span class="feature-icon">🔮</span>
+            <h3 style="color: #8b5cf6; margin-bottom: 15px;">Predictive Maintenance</h3>
+            <p style="color: #6b7280; font-size: 0.95rem;">
+                Leverage historical data to predict machine failures and optimize maintenance schedules.
+            </p>
+        </div>
         """, unsafe_allow_html=True)
     
-    st.markdown("---")
-    st.info("👈 Use the sidebar to navigate to Data Visualization or Comparison Analysis")
+    # Use Cases Section
+    st.markdown("""
+    <div class="use-case-section">
+        <h2 style="font-size: 2.5rem; margin-bottom: 30px; text-align: center;">
+            🏭 Empowering Decisions Across the Factory Floor
+        </h2>
+        <p style="font-size: 1.2rem; margin-bottom: 40px; text-align: center; opacity: 0.95;">
+            FlowViz integrates seamlessly with ERP, MES, and sensor data to provide a unified view of your entire operation, from raw materials to final shipment.
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+            <div style="padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 10px;">
+                <h3 style="margin-bottom: 10px;">✅ Manufacturing</h3>
+                <p style="opacity: 0.9;">Reduce bottlenecks and increase throughput efficiency.</p>
+            </div>
+            <div style="padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 10px;">
+                <h3 style="margin-bottom: 10px;">✅ Utility Management</h3>
+                <p style="opacity: 0.9;">Pinpoint processes with the highest energy and water footprint.</p>
+            </div>
+            <div style="padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 10px;">
+                <h3 style="margin-bottom: 10px;">✅ Quality Control</h3>
+                <p style="opacity: 0.9;">Correlate production inputs with finished product quality metrics.</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Quick Start Guide
+    st.markdown("<h2 style='text-align: center; font-size: 2rem; margin: 60px 0 30px 0; color: #1f2937;'>🚀 Quick Start</h2>", unsafe_allow_html=True)
+    
+    col_a, col_b, col_c = st.columns(3)
+    
+    with col_a:
+        st.markdown("""
+        <div style="text-align: center; padding: 20px;">
+            <div style="font-size: 3rem; margin-bottom: 15px;">1️⃣</div>
+            <h3 style="color: #10b981; margin-bottom: 10px;">Upload Data</h3>
+            <p style="color: #6b7280;">Navigate to Data Visualization and upload your CSV or Excel files</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col_b:
+        st.markdown("""
+        <div style="text-align: center; padding: 20px;">
+            <div style="font-size: 3rem; margin-bottom: 15px;">2️⃣</div>
+            <h3 style="color: #06b6d4; margin-bottom: 10px;">Analyze</h3>
+            <p style="color: #6b7280;">Let AI recommend the best visualizations for your data</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col_c:
+        st.markdown("""
+        <div style="text-align: center; padding: 20px;">
+            <div style="font-size: 3rem; margin-bottom: 15px;">3️⃣</div>
+            <h3 style="color: #8b5cf6; margin-bottom: 10px;">Export</h3>
+            <p style="color: #6b7280;">Download insights and share with your team</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.info("👈 Use the sidebar to navigate to Data Visualization or Month Comparison")
 
-def analyze_data_with_ml(df):
-    """Use ML to determine best visualizations for the data"""
-    recommendations = []
-    
-    # Separate numeric and categorical columns
-    numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-    categorical_cols = df.select_dtypes(include=['object']).columns.tolist()
-    
-    # Date columns detection
-    date_cols = []
-    for col in df.columns:
-        if df[col].dtype == 'object':
-            try:
-                pd.to_datetime(df[col])
-                date_cols.append(col)
-            except (ValueError, TypeError):
-                pass
-    
-    # Recommendation 1: Time series if date column exists
-    if date_cols and numeric_cols:
-        recommendations.append({
-            'type': 'time_series',
-            'x': date_cols[0],
-            'y': numeric_cols[:3],  # Top 3 numeric columns
-            'title': f'Time Series Analysis',
-            'priority': 1
-        })
-    
-    # Recommendation 2: Correlation heatmap for numeric data
-    if len(numeric_cols) >= 2:
-        recommendations.append({
-            'type': 'heatmap',
-            'columns': numeric_cols[:10],  # Max 10 columns for readability
-            'title': 'Correlation Heatmap',
-            'priority': 2
-        })
-    
-    # Recommendation 3: Distribution plots for numeric columns
-    if numeric_cols:
-        # Use variance to identify most interesting columns
-        variances = df[numeric_cols].var().sort_values(ascending=False)
-        top_cols = variances.head(3).index.tolist()
-        recommendations.append({
-            'type': 'distribution',
-            'columns': top_cols,
-            'title': 'Distribution Analysis',
-            'priority': 3
-        })
-    
-    # Recommendation 4: Category analysis
-    if categorical_cols and numeric_cols:
-        # Find categorical column with reasonable number of unique values
-        for cat_col in categorical_cols:
-            if 2 <= df[cat_col].nunique() <= 20:
-                recommendations.append({
-                    'type': 'category_analysis',
-                    'category': cat_col,
-                    'values': numeric_cols[:2],
-                    'title': f'Analysis by {cat_col}',
-                    'priority': 4
-                })
-                break
-    
-    # Recommendation 5: Top N analysis
-    if categorical_cols and numeric_cols:
-        recommendations.append({
-            'type': 'top_n',
-            'category': categorical_cols[0],
-            'value': numeric_cols[0],
-            'title': f'Top 10 by {numeric_cols[0]}',
-            'priority': 5
-        })
-    
-    return sorted(recommendations, key=lambda x: x['priority'])
-
-def create_visualization(df, recommendation):
-    """Create visualization based on ML recommendation"""
-    fig = None
-    
-    if recommendation['type'] == 'time_series':
-        df_copy = df.copy()
-        df_copy[recommendation['x']] = pd.to_datetime(df_copy[recommendation['x']])
-        df_sorted = df_copy.sort_values(recommendation['x'])
-        
-        fig = go.Figure()
-        for y_col in recommendation['y']:
-            if y_col in df_sorted.columns:
-                fig.add_trace(go.Scatter(
-                    x=df_sorted[recommendation['x']],
-                    y=df_sorted[y_col],
-                    mode='lines+markers',
-                    name=y_col
-                ))
-        
-        fig.update_layout(
-            title=recommendation['title'],
-            xaxis_title=recommendation['x'],
-            yaxis_title='Values',
-            hovermode='x unified',
-            template='plotly_white'
-        )
-    
-    elif recommendation['type'] == 'heatmap':
-        corr_matrix = df[recommendation['columns']].corr()
-        fig = px.imshow(
-            corr_matrix,
-            labels=dict(color="Correlation"),
-            x=corr_matrix.columns,
-            y=corr_matrix.columns,
-            color_continuous_scale='RdBu_r',
-            aspect='auto',
-            title=recommendation['title']
-        )
-    
-    elif recommendation['type'] == 'distribution':
-        fig = go.Figure()
-        for col in recommendation['columns']:
-            fig.add_trace(go.Histogram(
-                x=df[col],
-                name=col,
-                opacity=0.7
-            ))
-        
-        fig.update_layout(
-            title=recommendation['title'],
-            xaxis_title='Value',
-            yaxis_title='Frequency',
-            barmode='overlay',
-            template='plotly_white'
-        )
-    
-    elif recommendation['type'] == 'category_analysis':
-        grouped = df.groupby(recommendation['category'])[recommendation['values']].mean().reset_index()
-        
-        fig = go.Figure()
-        for val_col in recommendation['values']:
-            if val_col in grouped.columns:
-                fig.add_trace(go.Bar(
-                    x=grouped[recommendation['category']],
-                    y=grouped[val_col],
-                    name=val_col
-                ))
-        
-        fig.update_layout(
-            title=recommendation['title'],
-            xaxis_title=recommendation['category'],
-            yaxis_title='Average Value',
-            template='plotly_white'
-        )
-    
-    elif recommendation['type'] == 'top_n':
-        top_data = df.nlargest(10, recommendation['value'])[[recommendation['category'], recommendation['value']]]
-        
-        fig = px.bar(
-            top_data,
-            x=recommendation['value'],
-            y=recommendation['category'],
-            orientation='h',
-            title=recommendation['title'],
-            template='plotly_white'
-        )
-    
-    return fig
 
 def data_visualization_page():
     """Data visualization page"""
@@ -373,35 +368,76 @@ def data_visualization_page():
     
     # File uploader
     st.header("📁 Upload Your Data")
-    uploaded_file = st.file_uploader(
-        "Choose a CSV or Excel file",
-        type=['csv', 'xlsx', 'xls'],
-        help="Upload your FMGC industry data file"
+    
+    # Option to choose between sample data or upload
+    data_source = st.radio(
+        "Select Data Source:",
+        ["📂 Use Sample Data", "💻 Upload from Local Machine"],
+        horizontal=True
     )
     
+    uploaded_file = None
+    
+    if data_source == "📂 Use Sample Data":
+        sample_files = {
+            "August 2025": "SampleData/Aug.csv",
+            "September 2025": "SampleData/Sep.csv",
+            "October 2025": "SampleData/Oct.csv"
+        }
+        
+        selected_sample = st.selectbox(
+            "Choose Sample Dataset:",
+            list(sample_files.keys())
+        )
+        
+        if st.button("Load Sample Data", type="primary"):
+            try:
+                df = pd.read_csv(sample_files[selected_sample])
+                st.session_state.data = df
+                st.success(f"✅ Sample data '{selected_sample}' loaded successfully!")
+                uploaded_file = "sample"  # Flag to trigger processing
+            except Exception as e:
+                st.error(f"Error loading sample data: {str(e)}")
+    else:
+        uploaded_file = st.file_uploader(
+            "Choose a CSV or Excel file",
+            type=['csv', 'xlsx', 'xls'],
+            help="Upload your industry data file"
+        )
+    
+    # Process uploaded file or use session state data
     if uploaded_file is not None:
         try:
-            # Read the file
-            if uploaded_file.name.endswith('.csv'):
-                df = pd.read_csv(uploaded_file)
-            else:
-                df = pd.read_excel(uploaded_file)
+            # Only read file if it's not the sample flag
+            if uploaded_file != "sample":
+                # Read the file
+                if uploaded_file.name.endswith('.csv'):
+                    df = pd.read_csv(uploaded_file)
+                else:
+                    df = pd.read_excel(uploaded_file)
+                
+                st.session_state.data = df
+                st.success(f"✅ File loaded successfully! Shape: {df.shape[0]} rows × {df.shape[1]} columns")
             
-            st.session_state.data = df
+            # Use data from session state (either just loaded or from sample)
+            df = st.session_state.data
             
             # Display data overview
-            st.success(f"✅ File loaded successfully! Shape: {df.shape[0]} rows × {df.shape[1]} columns")
+            if uploaded_file != "sample":
+                st.success(f"✅ File loaded successfully! Shape: {df.shape[0]} rows × {df.shape[1]} columns")
             
             # Show data preview
             with st.expander("🔍 Data Preview", expanded=True):
                 st.dataframe(df.head(10), use_container_width=True)
             
-            # Basic statistics
+            # Basic statistics using helper
+            stats = get_data_statistics(df)
             col1, col2, col3, col4 = st.columns(4)
+            
             with col1:
                 st.markdown(f"""
                     <div class='metric-card'>
-                        <h3>{df.shape[0]}</h3>
+                        <h3>{stats['total_rows']}</h3>
                         <p>Total Rows</p>
                     </div>
                 """, unsafe_allow_html=True)
@@ -409,25 +445,23 @@ def data_visualization_page():
             with col2:
                 st.markdown(f"""
                     <div class='metric-card'>
-                        <h3>{df.shape[1]}</h3>
+                        <h3>{stats['total_columns']}</h3>
                         <p>Total Columns</p>
                     </div>
                 """, unsafe_allow_html=True)
             
             with col3:
-                numeric_cols = len(df.select_dtypes(include=[np.number]).columns)
                 st.markdown(f"""
                     <div class='metric-card'>
-                        <h3>{numeric_cols}</h3>
+                        <h3>{stats['numeric_columns']}</h3>
                         <p>Numeric Columns</p>
                     </div>
                 """, unsafe_allow_html=True)
             
             with col4:
-                categorical_cols = len(df.select_dtypes(include=['object']).columns)
                 st.markdown(f"""
                     <div class='metric-card'>
-                        <h3>{categorical_cols}</h3>
+                        <h3>{stats['categorical_columns']}</h3>
                         <p>Categorical Columns</p>
                     </div>
                 """, unsafe_allow_html=True)
@@ -499,63 +533,148 @@ def data_visualization_page():
         
         except Exception as e:
             st.error(f"Error loading file: {str(e)}")
+    elif st.session_state.data is not None:
+        # Data was loaded in a previous interaction (sample data)
+        df = st.session_state.data
+        st.info(f"📊 Currently viewing data with {df.shape[0]} rows × {df.shape[1]} columns")
+        
+        # Show the same analysis for persisted data
+        with st.expander("🔍 Data Preview", expanded=False):
+            st.dataframe(df.head(10), use_container_width=True)
+        
+        # Continue with analysis...
+        stats = get_data_statistics(df)
+        recommendations = analyze_data_with_ml(df)
+        
+        # Display recommendations
+        if recommendations:
+            st.header("🤖 ML-Recommended Visualizations")
+            for idx, rec in enumerate(recommendations):
+                with st.container():
+                    st.subheader(f"📈 Visualization {idx + 1}: {rec['title']}")
+                    fig = create_visualization(df, rec)
+                    if fig:
+                        st.plotly_chart(fig, use_container_width=True)
+                        col_a, col_b, col_c = st.columns([3, 1, 3])
+                        with col_b:
+                            buffer = io.StringIO()
+                            fig.write_html(buffer)
+                            html_bytes = buffer.getvalue().encode()
+                            st.download_button(
+                                label="💾 Download Chart",
+                                data=html_bytes,
+                                file_name=f"visualization_{idx+1}.html",
+                                mime="text/html",
+                                use_container_width=True
+                            )
+                        st.markdown("---")
     else:
-        st.info("👆 Please upload a CSV or Excel file to begin visualization")
+        st.info("👆 Please select a data source and load data to begin visualization")
 
 def comparison_page():
     """Data comparison page for previous month analysis"""
     st.title("📊 Month-over-Month Comparison")
     
-    col1, col2 = st.columns(2)
+    # Option to choose between sample data or upload
+    comp_data_source = st.radio(
+        "Select Data Source:",
+        ["📂 Use Sample Data", "💻 Upload from Local Machine"],
+        horizontal=True,
+        key="comparison_source"
+    )
     
-    with col1:
-        st.header("📅 Current Month Data")
-        current_file = st.file_uploader(
-            "Upload current month data",
-            type=['csv', 'xlsx', 'xls'],
-            key="current"
-        )
+    current_file = None
+    previous_file = None
+    current_df = None
+    previous_df = None
     
-    with col2:
-        st.header("📅 Previous Month Data")
-        previous_file = st.file_uploader(
-            "Upload previous month data",
-            type=['csv', 'xlsx', 'xls'],
-            key="previous"
-        )
+    if comp_data_source == "📂 Use Sample Data":
+        st.info("📌 Compare August vs September, or September vs October")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.header("📅 Previous Month")
+            prev_sample = st.selectbox(
+                "Select previous month:",
+                ["August 2025", "September 2025"],
+                key="prev_month"
+            )
+        
+        with col2:
+            st.header("📅 Current Month")
+            curr_sample = st.selectbox(
+                "Select current month:",
+                ["September 2025", "October 2025"],
+                key="curr_month"
+            )
+        
+        if st.button("Load Sample Data for Comparison", type="primary"):
+            try:
+                sample_map = {
+                    "August 2025": "SampleData/Aug.csv",
+                    "September 2025": "SampleData/Sep.csv",
+                    "October 2025": "SampleData/Oct.csv"
+                }
+                previous_df = pd.read_csv(sample_map[prev_sample])
+                current_df = pd.read_csv(sample_map[curr_sample])
+                current_file = "sample"
+                previous_file = "sample"
+                st.success(f"✅ Loaded {prev_sample} vs {curr_sample}")
+            except Exception as e:
+                st.error(f"Error loading sample data: {str(e)}")
+    else:
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.header("📅 Current Month Data")
+            current_file = st.file_uploader(
+                "Upload current month data",
+                type=['csv', 'xlsx', 'xls'],
+                key="current"
+            )
+        
+        with col2:
+            st.header("📅 Previous Month Data")
+            previous_file = st.file_uploader(
+                "Upload previous month data",
+                type=['csv', 'xlsx', 'xls'],
+                key="previous"
+            )
+        
+        if current_file and previous_file:
+            try:
+                # Read files
+                if current_file.name.endswith('.csv'):
+                    current_df = pd.read_csv(current_file)
+                else:
+                    current_df = pd.read_excel(current_file)
+                
+                if previous_file.name.endswith('.csv'):
+                    previous_df = pd.read_csv(previous_file)
+                else:
+                    previous_df = pd.read_excel(previous_file)
+                
+                st.success("✅ Both files loaded successfully!")
+            except Exception as e:
+                st.error(f"Error processing files: {str(e)}")
     
-    if current_file and previous_file:
+    # Process comparison if data is loaded (either from sample or upload)
+    if current_df is not None and previous_df is not None:
         try:
-            # Read files
-            if current_file.name.endswith('.csv'):
-                current_df = pd.read_csv(current_file)
-            else:
-                current_df = pd.read_excel(current_file)
             
-            if previous_file.name.endswith('.csv'):
-                previous_df = pd.read_csv(previous_file)
-            else:
-                previous_df = pd.read_excel(previous_file)
-            
-            st.success("✅ Both files loaded successfully!")
-            
-            # Find common numeric columns
-            current_numeric = set(current_df.select_dtypes(include=[np.number]).columns)
-            previous_numeric = set(previous_df.select_dtypes(include=[np.number]).columns)
-            common_numeric = list(current_numeric.intersection(previous_numeric))
+            # Find common numeric columns and create summary using helper
+            common_numeric, summary = calculate_comparison_summary(current_df, previous_df)
             
             if common_numeric:
                 st.markdown("---")
                 st.header("📈 Comparative Analysis")
                 
-                # Summary comparison
+                # Summary comparison using helpers
                 col1, col2, col3 = st.columns(3)
                 
                 with col1:
-                    current_total = current_df[common_numeric].sum().sum()
-                    previous_total = previous_df[common_numeric].sum().sum()
-                    change = ((current_total - previous_total) / previous_total * 100) if previous_total != 0 else 0
-                    
+                    change = calculate_overall_change(current_df, previous_df, common_numeric)
                     st.markdown(f"""
                         <div class='metric-card'>
                             <h3>{change:+.2f}%</h3>
@@ -572,7 +691,7 @@ def comparison_page():
                     """, unsafe_allow_html=True)
                 
                 with col3:
-                    avg_change = current_df[common_numeric].mean().mean() - previous_df[common_numeric].mean().mean()
+                    avg_change = calculate_average_difference(current_df, previous_df, common_numeric)
                     st.markdown(f"""
                         <div class='metric-card'>
                             <h3>{avg_change:+.2f}</h3>
@@ -586,26 +705,12 @@ def comparison_page():
                 for col in common_numeric[:5]:  # Show top 5 metrics
                     st.subheader(f"📊 {col} Comparison")
                     
-                    # Create comparison chart
-                    comparison_data = pd.DataFrame({
-                        'Period': ['Previous Month', 'Current Month'],
-                        col: [previous_df[col].sum(), current_df[col].sum()]
-                    })
-                    
-                    fig = px.bar(
-                        comparison_data,
-                        x='Period',
-                        y=col,
-                        title=f'{col} - Month over Month',
-                        template='plotly_white',
-                        color='Period',
-                        color_discrete_sequence=['#764ba2', '#667eea']
-                    )
-                    
+                    # Create comparison chart using helper
+                    fig = create_comparison_chart(current_df, previous_df, col)
                     st.plotly_chart(fig, use_container_width=True)
                     
-                    # Calculate and show change
-                    change = ((current_df[col].sum() - previous_df[col].sum()) / previous_df[col].sum() * 100) if previous_df[col].sum() != 0 else 0
+                    # Calculate and show change using helper
+                    change = calculate_metric_change(current_df, previous_df, col)
                     
                     if change > 0:
                         st.success(f"📈 Increase of {change:.2f}%")
@@ -634,14 +739,6 @@ def comparison_page():
                 
                 # Download comparison summary
                 st.header("💾 Download Comparison Report")
-                
-                # Create summary dataframe
-                summary = pd.DataFrame({
-                    'Metric': common_numeric,
-                    'Previous Month': [previous_df[col].sum() for col in common_numeric],
-                    'Current Month': [current_df[col].sum() for col in common_numeric],
-                })
-                summary['Change (%)'] = ((summary['Current Month'] - summary['Previous Month']) / summary['Previous Month'] * 100).round(2)
                 
                 col1, col2 = st.columns(2)
                 
@@ -678,6 +775,236 @@ def comparison_page():
     else:
         st.info("👆 Please upload both current and previous month data files to begin comparison")
 
+
+def ceo_dashboard_page():
+    """CEO Dashboard with high-level business metrics"""
+    st.title("📊 CEO Dashboard - Business Overview")
+    
+    if st.session_state.data is None:
+        st.warning("⚠️ Please load data first from the Data Visualization page")
+        return
+    
+    df = st.session_state.data
+    
+    # Calculate KPIs
+    kpis = create_kpi_cards(df)
+    
+    # Display KPI Cards
+    st.header("🎯 Key Performance Indicators")
+    cols = st.columns(4)
+    
+    with cols[0]:
+        if 'total_revenue' in kpis:
+            st.markdown(f"""
+                <div class='metric-card'>
+                    <h3>${kpis['total_revenue']:,.0f}</h3>
+                    <p>Total Revenue</p>
+                </div>
+            """, unsafe_allow_html=True)
+    
+    with cols[1]:
+        if 'total_transactions' in kpis:
+            st.markdown(f"""
+                <div class='metric-card'>
+                    <h3>{kpis['total_transactions']:,}</h3>
+                    <p>Total Transactions</p>
+                </div>
+            """, unsafe_allow_html=True)
+    
+    with cols[2]:
+        if 'avg_transaction' in kpis:
+            st.markdown(f"""
+                <div class='metric-card'>
+                    <h3>${kpis['avg_transaction']:.2f}</h3>
+                    <p>Avg Transaction Value</p>
+                </div>
+            """, unsafe_allow_html=True)
+    
+    with cols[3]:
+        if 'revenue_per_hour' in kpis:
+            st.markdown(f"""
+                <div class='metric-card'>
+                    <h3>${kpis['revenue_per_hour']:.2f}</h3>
+                    <p>Revenue per Hour</p>
+                </div>
+            """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # Revenue Trend
+    fig = create_revenue_trend(df)
+    if fig:
+        st.plotly_chart(fig, use_container_width=True)
+    
+    # Two columns for regional and product mix
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        fig = create_regional_performance(df)
+        if fig:
+            st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        fig = create_product_mix(df)
+        if fig:
+            st.plotly_chart(fig, use_container_width=True)
+    
+    # Efficiency metrics
+    fig = create_efficiency_metrics(df)
+    if fig:
+        st.plotly_chart(fig, use_container_width=True)
+    
+    # Two columns for promotion impact and top products
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        fig = create_promotion_impact(df)
+        if fig:
+            st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        fig = create_top_products(df, top_n=8)
+        if fig:
+            st.plotly_chart(fig, use_container_width=True)
+
+
+def custom_charts_page():
+    """Custom chart builder page"""
+    st.title("🎨 Custom Chart Builder")
+    
+    if st.session_state.data is None:
+        st.warning("⚠️ Please load data first from the Data Visualization page")
+        return
+    
+    df = st.session_state.data
+    
+    st.info("📌 Create custom visualizations by selecting columns and chart types")
+    
+    # Get column types
+    col_types = get_column_types(df)
+    
+    # Display available columns
+    with st.expander("📋 Available Columns", expanded=False):
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.markdown("**Numeric Columns:**")
+            st.write(col_types['numeric'])
+        with col2:
+            st.markdown("**Categorical Columns:**")
+            st.write(col_types['categorical'])
+        with col3:
+            st.markdown("**Date Columns:**")
+            st.write(col_types['date'])
+    
+    st.markdown("---")
+    
+    # Chart type selector
+    chart_type = st.selectbox(
+        "📊 Select Chart Type:",
+        ["Line Chart", "Bar Chart", "Scatter Plot", "Pie Chart", "Box Plot", 
+         "Correlation Heatmap", "Area Chart", "Histogram"]
+    )
+    
+    st.markdown("---")
+    
+    # Dynamic form based on chart type
+    if chart_type == "Line Chart":
+        st.subheader("📈 Line Chart Configuration")
+        x_col = st.selectbox("X-Axis (Date/Categorical):", 
+                            col_types['date'] + col_types['categorical'] + col_types['numeric'])
+        y_cols = st.multiselect("Y-Axis (Numeric - select one or more):", 
+                               col_types['numeric'])
+        title = st.text_input("Chart Title (optional):", "")
+        
+        if st.button("Generate Line Chart", type="primary") and y_cols:
+            fig = create_custom_line_chart(df, x_col, y_cols, title or None)
+            st.plotly_chart(fig, use_container_width=True)
+    
+    elif chart_type == "Bar Chart":
+        st.subheader("📊 Bar Chart Configuration")
+        x_col = st.selectbox("Category Column:", 
+                            col_types['categorical'] + col_types['date'])
+        y_col = st.selectbox("Value Column (Numeric):", col_types['numeric'])
+        orientation = st.radio("Orientation:", ["Vertical", "Horizontal"])
+        title = st.text_input("Chart Title (optional):", "")
+        
+        if st.button("Generate Bar Chart", type="primary"):
+            orient = 'h' if orientation == "Horizontal" else 'v'
+            fig = create_custom_bar_chart(df, x_col, y_col, orient, title or None)
+            st.plotly_chart(fig, use_container_width=True)
+    
+    elif chart_type == "Scatter Plot":
+        st.subheader("🔵 Scatter Plot Configuration")
+        x_col = st.selectbox("X-Axis:", col_types['numeric'])
+        y_col = st.selectbox("Y-Axis:", col_types['numeric'])
+        color_col = st.selectbox("Color by (optional):", 
+                                ["None"] + col_types['categorical'])
+        size_col = st.selectbox("Size by (optional):", 
+                               ["None"] + col_types['numeric'])
+        title = st.text_input("Chart Title (optional):", "")
+        
+        if st.button("Generate Scatter Plot", type="primary"):
+            color = None if color_col == "None" else color_col
+            size = None if size_col == "None" else size_col
+            fig = create_custom_scatter(df, x_col, y_col, color, size, title or None)
+            st.plotly_chart(fig, use_container_width=True)
+    
+    elif chart_type == "Pie Chart":
+        st.subheader("🥧 Pie Chart Configuration")
+        names_col = st.selectbox("Category Column:", col_types['categorical'])
+        values_col = st.selectbox("Value Column (Numeric):", col_types['numeric'])
+        title = st.text_input("Chart Title (optional):", "")
+        
+        if st.button("Generate Pie Chart", type="primary"):
+            fig = create_custom_pie_chart(df, names_col, values_col, title or None)
+            st.plotly_chart(fig, use_container_width=True)
+    
+    elif chart_type == "Box Plot":
+        st.subheader("📦 Box Plot Configuration")
+        category_col = st.selectbox("Category Column:", col_types['categorical'])
+        value_col = st.selectbox("Value Column (Numeric):", col_types['numeric'])
+        title = st.text_input("Chart Title (optional):", "")
+        
+        if st.button("Generate Box Plot", type="primary"):
+            fig = create_custom_box_plot(df, category_col, value_col, title or None)
+            st.plotly_chart(fig, use_container_width=True)
+    
+    elif chart_type == "Correlation Heatmap":
+        st.subheader("🔥 Correlation Heatmap Configuration")
+        if len(col_types['numeric']) >= 2:
+            selected_cols = st.multiselect("Select Numeric Columns (min 2):", 
+                                          col_types['numeric'],
+                                          default=col_types['numeric'][:5])
+            title = st.text_input("Chart Title (optional):", "")
+            
+            if st.button("Generate Heatmap", type="primary") and len(selected_cols) >= 2:
+                fig = create_custom_heatmap(df, selected_cols, title or None)
+                st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.warning("Need at least 2 numeric columns for correlation heatmap")
+    
+    elif chart_type == "Area Chart":
+        st.subheader("📊 Area Chart Configuration")
+        x_col = st.selectbox("X-Axis:", col_types['date'] + col_types['categorical'])
+        y_cols = st.multiselect("Y-Axis (Numeric - select one or more):", 
+                               col_types['numeric'])
+        title = st.text_input("Chart Title (optional):", "")
+        
+        if st.button("Generate Area Chart", type="primary") and y_cols:
+            fig = create_custom_area_chart(df, x_col, y_cols, title or None)
+            st.plotly_chart(fig, use_container_width=True)
+    
+    elif chart_type == "Histogram":
+        st.subheader("📊 Histogram Configuration")
+        column = st.selectbox("Select Column:", col_types['numeric'])
+        bins = st.slider("Number of Bins:", 10, 100, 30)
+        title = st.text_input("Chart Title (optional):", "")
+        
+        if st.button("Generate Histogram", type="primary"):
+            fig = create_custom_histogram(df, column, bins, title or None)
+            st.plotly_chart(fig, use_container_width=True)
+
+
 def main():
     """Main application logic"""
     
@@ -686,6 +1013,8 @@ def main():
     else:
         # Sidebar navigation
         with st.sidebar:
+            # Logo at top of sidebar
+            st.image("logo/flowviz_logo.png", width=100)
             st.title("🧭 Navigation")
             st.markdown("---")
             
@@ -697,6 +1026,8 @@ def main():
             menu_options = {
                 "🏠 Home": "home",
                 "📊 Data Visualization": "visualization",
+                "💼 CEO Dashboard": "ceo_dashboard",
+                "🎨 Custom Charts": "custom_charts",
                 "📈 Month Comparison": "comparison"
             }
             
@@ -719,13 +1050,17 @@ def main():
             st.markdown("---")
             st.markdown("### ℹ️ About")
             st.markdown("FlowViz v1.0")
-            st.markdown("FMGC Data Analytics Platform")
+            st.markdown("Industry Data Analytics Platform")
         
         # Display selected page
         if st.session_state.page == 'home':
             home_page()
         elif st.session_state.page == 'visualization':
             data_visualization_page()
+        elif st.session_state.page == 'ceo_dashboard':
+            ceo_dashboard_page()
+        elif st.session_state.page == 'custom_charts':
+            custom_charts_page()
         elif st.session_state.page == 'comparison':
             comparison_page()
 
