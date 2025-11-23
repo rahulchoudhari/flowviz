@@ -776,6 +776,140 @@ def comparison_page():
         st.info("👆 Please upload both current and previous month data files to begin comparison")
 
 
+def about_page():
+    """About page with app information and data privacy policy"""
+    st.title("ℹ️ About FlowViz")
+    
+    # App Overview
+    st.header("📱 Application Overview")
+    st.markdown("""
+    **FlowViz** is a comprehensive **Industry Data Analytics Platform** designed to help businesses 
+    gain actionable insights from their operational data. Built with Python and Streamlit, FlowViz 
+    provides powerful visualization and analysis tools without requiring any coding knowledge.
+    
+    ### 🎯 Key Features:
+    - **📊 Data Visualization**: Interactive charts and graphs with multiple visualization types
+    - **💼 CEO Dashboard**: Executive-level KPIs and business performance metrics
+    - **🎨 Custom Chart Builder**: Create custom visualizations with drag-and-drop simplicity
+    - **📈 Month Comparison**: Compare performance across different time periods
+    - **🤖 ML Insights**: Automated recommendations based on data patterns
+    - **📥 Sample Data**: Pre-loaded datasets for quick testing and exploration
+    """)
+    
+    st.markdown("---")
+    
+    # Data Privacy & Security
+    st.header("🔒 Data Privacy & Security")
+    st.markdown("""
+    ### Your Data is Safe and Private
+    
+    We take data privacy seriously. Here's what you need to know:
+    
+    ✅ **No Data Storage**: This application **does not store any of your data** on our servers or databases. 
+    All data processing happens in your browser session only.
+    
+    ✅ **Session-Based Processing**: Your uploaded data exists only in your active session. When you logout 
+    or close the browser, all data is immediately cleared from memory.
+    
+    ✅ **No Third-Party Sharing**: We do not share, sell, or transmit your data to any third parties.
+    
+    ✅ **Local Processing**: All computations and visualizations are performed locally within the application 
+    runtime. No data leaves your session.
+    
+    ✅ **Secure Connection**: The application uses standard web security protocols to protect data in transit.
+    
+    ### 📊 Sole Purpose: Data Visualization
+    
+    FlowViz is designed with **one primary goal**: to help you **visualize and analyze your data**. 
+    We provide the tools, you maintain full control of your information.
+    """)
+    
+    st.markdown("---")
+    
+    # Usage Guidelines
+    st.header("📖 How to Use FlowViz")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+        ### 🚀 Getting Started
+        1. **Login** with your credentials
+        2. Navigate to **Data Visualization**
+        3. **Upload your CSV file** or use sample data
+        4. Explore different visualization options
+        5. Access specialized dashboards as needed
+        """)
+    
+    with col2:
+        st.markdown("""
+        ### 💡 Best Practices
+        - Use CSV files with clear column headers
+        - Ensure date columns are properly formatted
+        - Include numeric columns for metrics
+        - Use sample data to test features first
+        - Download charts for reports/presentations
+        """)
+    
+    st.markdown("---")
+    
+    # Technical Information
+    st.header("⚙️ Technical Details")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        **Version**  
+        FlowViz v1.0
+        
+        **Framework**  
+        Streamlit
+        """)
+    
+    with col2:
+        st.markdown("""
+        **Language**  
+        Python 3.12
+        
+        **Libraries**  
+        Pandas, Plotly, NumPy
+        """)
+    
+    with col3:
+        st.markdown("""
+        **License**  
+        Open Source
+        
+        **Platform**  
+        Industry Data Analytics
+        """)
+    
+    st.markdown("---")
+    
+    # Support & Contact
+    st.header("📧 Support & Feedback")
+    st.markdown("""
+    Have questions or suggestions? We'd love to hear from you!
+    
+    - 📝 **Documentation**: Check the README and QUICKREF files in the repository
+    - 🐛 **Report Issues**: Submit bug reports through the issue tracker
+    - 💬 **Feature Requests**: Share your ideas for improvements
+    - ⭐ **Star the Project**: Show your support on GitHub
+    """)
+    
+    st.markdown("---")
+    
+    # Footer
+    st.markdown("""
+    <div style='text-align: center; color: #7f8c8d; padding: 20px;'>
+        <p><strong>FlowViz - Industry Data Analytics Platform</strong></p>
+        <p>Empowering businesses with data-driven insights</p>
+        <p>© 2025 FlowViz. Built with ❤️ using Streamlit</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+
 def ceo_dashboard_page():
     """CEO Dashboard with high-level business metrics"""
     st.title("📊 CEO Dashboard - Business Overview")
@@ -1028,7 +1162,8 @@ def main():
                 "📊 Data Visualization": "visualization",
                 "💼 CEO Dashboard": "ceo_dashboard",
                 "🎨 Custom Charts": "custom_charts",
-                "📈 Month Comparison": "comparison"
+                "📈 Month Comparison": "comparison",
+                "ℹ️ About": "about"
             }
             
             for label, page in menu_options.items():
@@ -1063,6 +1198,8 @@ def main():
             custom_charts_page()
         elif st.session_state.page == 'comparison':
             comparison_page()
+        elif st.session_state.page == 'about':
+            about_page()
 
 if __name__ == "__main__":
     main()
