@@ -3,11 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from datetime import datetime, timedelta
 import io
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-import json
 import hashlib
 
 # Page configuration
@@ -222,7 +218,7 @@ def analyze_data_with_ml(df):
             try:
                 pd.to_datetime(df[col])
                 date_cols.append(col)
-            except:
+            except (ValueError, TypeError):
                 pass
     
     # Recommendation 1: Time series if date column exists
